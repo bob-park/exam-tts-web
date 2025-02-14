@@ -118,7 +118,12 @@ export default function HistorySideMenu() {
             <h4 className="w-full text-sm font-semibold text-gray-400">어제</h4>
             <div className="flex w-full flex-col gap-2">
               {displayHistory.yesterday.map((item) => (
-                <HistoryItem key={`yesterday-history-item-${item.id}`} history={item} active={item.id === currentId} />
+                <HistoryItem
+                  key={`yesterday-history-item-${item.id}`}
+                  history={item}
+                  active={item.id === currentId}
+                  onClick={handleClick}
+                />
               ))}
             </div>
           </div>
@@ -128,7 +133,12 @@ export default function HistorySideMenu() {
             <h4 className="w-full text-sm font-semibold text-gray-400">지난 7일</h4>
             <div className="flex w-full flex-col gap-2">
               {displayHistory.last7Day.map((item) => (
-                <HistoryItem key={`last7day-history-item-${item.id}`} history={item} active={item.id === currentId} />
+                <HistoryItem
+                  key={`last7day-history-item-${item.id}`}
+                  history={item}
+                  active={item.id === currentId}
+                  onClick={handleClick}
+                />
               ))}
             </div>
           </div>
@@ -138,7 +148,12 @@ export default function HistorySideMenu() {
             <h4 className="w-full text-sm font-semibold text-gray-400">지난 30일</h4>
             <div className="flex w-full flex-col gap-2">
               {displayHistory.last30Day.map((item) => (
-                <HistoryItem key={`last30day-history-item-${item.id}`} history={item} active={item.id === currentId} />
+                <HistoryItem
+                  key={`last30day-history-item-${item.id}`}
+                  history={item}
+                  active={item.id === currentId}
+                  onClick={handleClick}
+                />
               ))}
             </div>
           </div>
