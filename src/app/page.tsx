@@ -8,13 +8,13 @@ export default function Home() {
     <div className="flex w-full flex-row items-start gap-5">
       <HistoryContextProvider>
         {/* side menu */}
-        <div className="w-80 flex-none">
+        <div className="sticky top-[130px] h-[calc(100vh-180px)] w-80 flex-none">
           <HistorySideMenu />
         </div>
 
         <div className="w-full">
-          <div className="flex size-full flex-col items-center justify-center gap-5">
-            <div className="w-full max-w-[650px]">
+          <div className="flex size-full flex-col items-center gap-5">
+            <div className="sticky top-[130px] w-full max-w-[650px]">
               <SearchQueryInput />
             </div>
           </div>

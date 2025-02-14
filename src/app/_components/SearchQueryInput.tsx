@@ -22,7 +22,7 @@ export default function SearchQueryInput() {
 
   // query
   const { textToSql, isLoading } = useAssetScriptTTS((result) => {
-    const currentId = uuid();
+    const currentId = uuid().toString();
 
     onAdd({
       id: currentId,
