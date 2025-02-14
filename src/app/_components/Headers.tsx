@@ -25,7 +25,7 @@ export default function Headers() {
 
           {/* logo */}
           <Link className="btn btn-ghost" href="/">
-            <h2 className="select-none text-2xl font-bold"></h2>
+            <h2 className="select-none text-2xl font-bold">mgGPT</h2>
           </Link>
         </div>
       </div>

@@ -12,19 +12,23 @@ export interface SearchHistoryItem {
 }
 
 interface HistoryContextValue {
+  currentId?: string;
   histories: SearchHistoryItem[];
   onAdd: (item: SearchHistoryItem) => void;
   onRemove: (id: string) => void;
+  onChangeCurrentId: (id: string) => void;
 }
 
 export const HistoryContext = createContext<HistoryContextValue>({
   histories: [],
   onAdd: () => {},
   onRemove: () => {},
+  onChangeCurrentId: () => {},
 });
 
 export default function HistoryContextProvider({ children }: Readonly<{ children: React.ReactNode }>) {
   // state
+  const [currentId, setCurrentId] = useState<string>();
   const [histories, setHistories] = useState<SearchHistoryItem[]>([]);
 
   // useEffect
@@ -67,14 +71,20 @@ export default function HistoryContextProvider({ children }: Readonly<{ children
     });
   };
 
+  const handleChangeCurrentId = (id: string) => {
+    setCurrentId(id);
+  };
+
   // memo
   const contextValue = useMemo(
     () => ({
+      currentId,
       histories,
       onAdd: handleAdd,
       onRemove: handleRemove,
+      onChangeCurrentId: handleChangeCurrentId,
     }),
-    [histories],
+    [currentId, histories],
   );
 
   return <HistoryContext.Provider value={contextValue}>{children}</HistoryContext.Provider>;

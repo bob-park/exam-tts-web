@@ -64,7 +64,7 @@ const ASSET_SCRIPTS: AssetScript[] = [
 ];
 
 const handlers = [
-  http.get('/assets/scripts/tts', () => {
+  http.post('/assets/scripts/tts', () => {
     return HttpResponse.json(ASSET_SCRIPTS, {
       headers: {
         'Set-Cookie': 'connect.sid=msw-cookie;HttpOnly;Path=/',

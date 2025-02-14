@@ -49,7 +49,7 @@ export default async function RootLayout({
           <script src="https://unpkg.com/react-scan/dist/auto.global.js" />
         </head>
       )}
-      <body className="relative min-w-max">
+      <body className="relative h-full min-w-max">
         <RQProvider>
           <HydrationBoundary state={dehydratedState}>
             {/* headers */}
