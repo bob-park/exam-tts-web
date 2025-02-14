@@ -31,5 +31,5 @@ async function apiCall(
   });
 }
 export const config = {
-  matcher: ['/api/assets/scripts/tts'],
+  matcher: [],
 };

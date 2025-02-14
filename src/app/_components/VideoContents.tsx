@@ -86,16 +86,25 @@ export default function VideoContents() {
     setCurrentScriptId(id);
   };
 
+  if (!current) {
+    return;
+  }
+
   return (
     <div className="flex size-full flex-row items-center justify-center gap-6">
       {/* video */}
       <div className="card p-2 shadow-xl">
         <div className="card-body">
-          <video className="h-[300px] w-[400px]" ref={videoRef} src={`/api/assets/${1}/resource`} controls />
+          <video
+            className="max-h-[600px] min-h-[300px] min-w-[400px] max-w-[800px]"
+            ref={videoRef}
+            src={`/api/assets/${1}/resource`}
+            controls
+          />
         </div>
       </div>
 
-      <div className="size-full h-[380px] w-96 rounded-2xl p-4 shadow-xl">
+      <div className="size-full h-[540px] w-96 rounded-2xl p-4 shadow-xl">
         <div className="flex size-full flex-none flex-col items-center gap-3 overflow-auto">
           {current &&
             current.scripts.map((script) => (
