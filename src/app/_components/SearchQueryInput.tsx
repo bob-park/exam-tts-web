@@ -58,7 +58,7 @@ export default function SearchQueryInput() {
             <input
               className="input w-full"
               type="text"
-              placeholder="찾고 싶으면 쓰세요"
+              placeholder="찾고 싶으면 쓰세요!!!!"
               onChange={handleChange}
               value={value}
               disabled={isLoading}
