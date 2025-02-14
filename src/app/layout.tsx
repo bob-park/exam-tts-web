@@ -3,6 +3,8 @@ import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
+import Headers from '@/app/_components/Headers';
+
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
 
 import RQProvider from './_components/RQProvider';
@@ -49,7 +51,15 @@ export default async function RootLayout({
       )}
       <body className="relative min-w-max">
         <RQProvider>
-          <HydrationBoundary state={dehydratedState}>{children}</HydrationBoundary>
+          <HydrationBoundary state={dehydratedState}>
+            {/* headers */}
+            <div className="sticky left-0 top-1 z-50 flex w-full flex-row items-start justify-center px-5">
+              <Headers />
+            </div>
+
+            {/* content */}
+            <div className="mx-3 my-4 p-3">{children}</div>
+          </HydrationBoundary>
         </RQProvider>
       </body>
     </html>

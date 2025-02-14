@@ -14,8 +14,6 @@ interface User {
   phone?: string;
   cellPhone?: string;
   role: Role;
-  position: Position;
-  team: Team;
   createdDate: Date;
   createdBy: string;
   lastModifiedDate?: Date;
