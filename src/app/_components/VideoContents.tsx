@@ -4,11 +4,14 @@ import { useContext, useEffect, useRef, useState } from 'react';
 
 import { HistoryContext } from '@/app/_components/HistoryContextProvider';
 
+import { useAsset } from '@/domain/asset/query/asset';
+
 import { frameToSec, toTimeCode } from '@/utils/timecode';
 
 import cx from 'classnames';
 
 const DEFAULT_FPS = 29.97;
+const VIDEO_ID = 'tts_video_id';
 
 const AssetScriptItem = ({
   item,
@@ -51,35 +54,42 @@ const AssetScriptItem = ({
 };
 
 export default function VideoContents() {
-  // ref
-  const videoRef = useRef<HTMLVideoElement>(null);
-
   // context
   const { currentId, histories } = useContext(HistoryContext);
 
   // state
   const [currentScriptId, setCurrentScriptId] = useState<number>();
+  const [totalVideoSeconds, setTotalVideoSeconds] = useState<number>(0);
+  const [currentVideoSeconds, setCurrentVideoSeconds] = useState<number>(0);
 
   const current = histories.find((item) => item.id === currentId);
+  const currentScript = current?.scripts.find((script) => script.id === currentScriptId);
+
+  // query
+  const { asset } = useAsset(currentScript?.assetId);
 
   // useEffect
   useEffect(() => {
-    if (!current || !currentScriptId || !videoRef.current) {
+    const video = document.getElementById(VIDEO_ID) as HTMLVideoElement;
+
+    if (!currentScript || !video) {
       return;
     }
 
-    const { scripts } = current;
+    video.currentTime = frameToSec(DEFAULT_FPS, currentScript.inPoint);
 
-    const selectedScript = scripts.find((script) => script.id === currentScriptId);
+    video.play();
 
-    if (!selectedScript) {
-      return;
-    }
+    const interval = setInterval(() => {
+      if (video.currentTime > frameToSec(DEFAULT_FPS, currentScript.outPoint)) {
+        video.pause();
+      }
+    }, 10);
 
-    videoRef.current.currentTime = frameToSec(DEFAULT_FPS, selectedScript.inPoint);
-
-    videoRef.current.play();
-  }, [current, currentScriptId]);
+    return () => {
+      interval && clearInterval(interval);
+    };
+  }, [currentScript, asset]);
 
   // handle
   const handleScriptClick = (id: number) => {
@@ -93,16 +103,25 @@ export default function VideoContents() {
   return (
     <div className="flex size-full flex-row items-center justify-center gap-6">
       {/* video */}
-      <div className="card p-2 shadow-xl">
-        <div className="card-body">
-          <video
-            className="max-h-[600px] min-h-[300px] min-w-[400px] max-w-[800px]"
-            ref={videoRef}
-            src={`/api/assets/${1}/resource`}
-            controls
-          />
+      {asset && (
+        <div className="card p-2 shadow-xl">
+          <div className="card-body">
+            <h2 className="card-title">{asset.title}</h2>
+            <video
+              id={VIDEO_ID}
+              className="max-h-[600px] min-h-[300px] min-w-[400px] max-w-[800px]"
+              src={`/api/assets/${asset.id}/resource`}
+              onTimeUpdate={(e) => setCurrentVideoSeconds(e.currentTarget.currentTime)}
+              onLoadedMetadata={(e) => setTotalVideoSeconds(e.currentTarget.duration)}
+            />
+            <div className="text-center">
+              <span className="font-semibold">{toTimeCode(currentVideoSeconds)}</span>
+              <span className=""> / </span>
+              <span className="">{currentScript && toTimeCode(frameToSec(DEFAULT_FPS, currentScript.outPoint))}</span>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="size-full h-[540px] w-96 rounded-2xl p-4 shadow-xl">
         <div className="flex size-full flex-none flex-col items-center gap-3 overflow-auto">
