@@ -2,6 +2,7 @@
 
 import { useContext, useEffect, useRef, useState } from 'react';
 
+import { FaArrowDown, FaArrowUp } from 'react-icons/fa';
 import { MdReplay } from 'react-icons/md';
 
 import { HistoryContext } from '@/app/_components/HistoryContextProvider';
@@ -145,15 +146,52 @@ export default function VideoContents() {
   // context
   const { currentId, histories } = useContext(HistoryContext);
 
+  // ref
+  const scriptsRef = useRef<HTMLDivElement>(null);
+
   // state
   const [currentScriptId, setCurrentScriptId] = useState<number>();
+  const [scriptScrollTop, setScriptScrollTop] = useState<number>(0);
 
   const current = histories.find((item) => item.id === currentId);
   const currentScript = current?.scripts.find((script) => script.id === currentScriptId);
 
+  // useEffect
+  useEffect(() => {
+    if (!scriptsRef.current) {
+      return;
+    }
+
+    function handleScroll(this: HTMLDivElement, ev: Event) {
+      setScriptScrollTop(this.scrollTop);
+    }
+
+    scriptsRef.current.addEventListener('scroll', handleScroll);
+
+    return () => {
+      scriptsRef.current?.removeEventListener('scroll', handleScroll);
+    };
+  }, [current]);
+
   // handle
   const handleScriptClick = (id: number) => {
     setCurrentScriptId(id);
+  };
+
+  const handleScriptOnTop = () => {
+    if (!scriptsRef.current) {
+      return;
+    }
+
+    scriptsRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleScriptOnBottom = () => {
+    if (!scriptsRef.current) {
+      return;
+    }
+
+    scriptsRef.current.scrollTo({ top: scriptsRef.current.scrollHeight, behavior: 'smooth' });
   };
 
   if (!current) {
@@ -173,8 +211,8 @@ export default function VideoContents() {
         </div>
       )}
 
-      <div className="size-full h-[524px] w-96 rounded-2xl p-4 shadow-xl">
-        <div className="flex size-full flex-none flex-col items-center gap-3 overflow-auto">
+      <div className="relative size-full h-[524px] w-96 rounded-2xl p-4 shadow-xl">
+        <div className="flex size-full flex-none flex-col items-center gap-3 overflow-auto" ref={scriptsRef}>
           {current &&
             current.scripts.map((script) => (
               <AssetScriptItem
@@ -184,6 +222,27 @@ export default function VideoContents() {
                 onClick={handleScriptClick}
               />
             ))}
+        </div>
+        <div className={cx('absolute bottom-2 right-4')}>
+          <div className="flex flex-col items-center justify-center gap-1">
+            <button
+              className={cx('btn btn-circle btn-neutral', scriptScrollTop < 50 ? 'hidden' : 'visible')}
+              onClick={handleScriptOnTop}
+            >
+              <FaArrowUp className="size-6" />
+            </button>
+            <button
+              className={cx(
+                'btn btn-circle btn-neutral',
+                scriptScrollTop + (scriptsRef.current?.clientHeight || 0) < (scriptsRef.current?.scrollHeight || 0)
+                  ? 'visible'
+                  : 'hidden',
+              )}
+              onClick={handleScriptOnBottom}
+            >
+              <FaArrowDown className="size-6" />
+            </button>
+          </div>
         </div>
       </div>
     </div>
