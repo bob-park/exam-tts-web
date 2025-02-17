@@ -74,12 +74,14 @@ export default function HistorySideMenu() {
       dayjs(history.createdAt).startOf('date').isSame(dayjs().add(-1, 'day').startOf('date')),
     );
 
-    const last7Day = histories.filter((history) =>
-      dayjs(history.createdAt).startOf('date').isSame(dayjs().add(-7, 'day').startOf('date')),
+    const last7Day = histories.filter(
+      (history) =>
+        dayjs(history.createdAt).startOf('date').isBefore(dayjs().add(-1, 'day').startOf('date')) &&
+        dayjs(history.createdAt).startOf('date').isAfter(dayjs().add(-1, 'month').startOf('date')),
     );
 
     const last30Day = histories.filter((history) =>
-      dayjs(history.createdAt).startOf('date').isSame(dayjs().add(-1, 'month').startOf('date')),
+      dayjs(history.createdAt).startOf('date').isBefore(dayjs().add(-1, 'month').startOf('date')),
     );
 
     setDisplayHistory({ today, yesterday, last7Day, last30Day });
@@ -113,8 +115,13 @@ export default function HistorySideMenu() {
             </div>
           </div>
 
-          {/* today */}
-          <div className="flex w-full flex-col items-start gap-2">
+          {/* yesterday */}
+          <div
+            className={cx(
+              'flex w-full flex-col items-start gap-2',
+              displayHistory.yesterday.length > 0 ? 'visible' : 'hidden',
+            )}
+          >
             <h4 className="w-full text-sm font-semibold text-gray-400">어제</h4>
             <div className="flex w-full flex-col gap-2">
               {displayHistory.yesterday.map((item) => (
@@ -128,8 +135,13 @@ export default function HistorySideMenu() {
             </div>
           </div>
 
-          {/* today */}
-          <div className="flex w-full flex-col items-start gap-2">
+          {/* prev 7 days */}
+          <div
+            className={cx(
+              'flex w-full flex-col items-start gap-2',
+              displayHistory.last7Day.length > 0 ? 'visible' : 'hidden',
+            )}
+          >
             <h4 className="w-full text-sm font-semibold text-gray-400">지난 7일</h4>
             <div className="flex w-full flex-col gap-2">
               {displayHistory.last7Day.map((item) => (
@@ -143,8 +155,13 @@ export default function HistorySideMenu() {
             </div>
           </div>
 
-          {/* today */}
-          <div className="flex w-full flex-col items-start gap-2">
+          {/* prev 30 days */}
+          <div
+            className={cx(
+              'flex w-full flex-col items-start gap-2',
+              displayHistory.last30Day.length > 0 ? 'visible' : 'hidden',
+            )}
+          >
             <h4 className="w-full text-sm font-semibold text-gray-400">지난 30일</h4>
             <div className="flex w-full flex-col gap-2">
               {displayHistory.last30Day.map((item) => (

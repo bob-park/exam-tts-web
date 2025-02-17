@@ -32,6 +32,8 @@ export default function SearchQueryInput() {
     });
 
     onChangeCurrentId(currentId);
+
+    setValue('');
   });
 
   // useEffect
