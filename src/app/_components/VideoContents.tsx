@@ -1,6 +1,6 @@
 'use client';
 
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 
 import { MdReplay } from 'react-icons/md';
 
@@ -55,42 +55,101 @@ const AssetScriptItem = ({
   );
 };
 
-export default function VideoContents() {
-  // context
-  const { currentId, histories } = useContext(HistoryContext);
+interface VideoClipProps {
+  assetId: number;
+  startTime: number;
+  endTime: number;
+}
+
+const VideoClip = ({ assetId, startTime, endTime }: VideoClipProps) => {
+  // useRef
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   // state
-  const [currentScriptId, setCurrentScriptId] = useState<number>();
   const [currentVideoSeconds, setCurrentVideoSeconds] = useState<number>(0);
 
-  const current = histories.find((item) => item.id === currentId);
-  const currentScript = current?.scripts.find((script) => script.id === currentScriptId);
-
   // query
-  const { asset } = useAsset(currentScript?.assetId);
+  const { asset } = useAsset(assetId);
 
   // useEffect
   useEffect(() => {
-    const video = document.getElementById(VIDEO_ID) as HTMLVideoElement;
+    videoRef.current = document.getElementById(VIDEO_ID) as HTMLVideoElement;
 
-    if (!currentScript || !video) {
-      return;
-    }
+    videoRef.current.currentTime = startTime;
 
-    video.currentTime = frameToSec(DEFAULT_FPS, currentScript.inPoint);
-
-    video.play();
+    videoRef.current.play();
 
     const interval = setInterval(() => {
-      if (video.currentTime > frameToSec(DEFAULT_FPS, currentScript.outPoint)) {
-        video.pause();
+      if (!videoRef.current) {
+        return;
+      }
+
+      if (videoRef.current.currentTime > endTime) {
+        videoRef.current.pause();
       }
     }, 10);
 
     return () => {
       interval && clearInterval(interval);
     };
-  }, [currentScript, asset]);
+  }, [asset, startTime, endTime]);
+
+  // handle
+  const handleReplayClick = () => {
+    if (!videoRef.current) {
+      return;
+    }
+
+    videoRef.current.currentTime = startTime;
+
+    videoRef.current.play();
+  };
+
+  return (
+    <div className="card p-2 shadow-xl">
+      <div className="card-body">
+        <h2 className="card-title">{asset?.title}</h2>
+        <div className="relative size-full">
+          <video
+            id={VIDEO_ID}
+            className="size-full"
+            src={`/api/assets/${assetId}/resource`}
+            onTimeUpdate={(e) => setCurrentVideoSeconds(e.currentTarget.currentTime)}
+          />
+          <div
+            className={cx(
+              'absolute left-0 top-0 z-50 flex size-full items-center justify-center gap-2 bg-gray-600 bg-opacity-80 p-2 transition-all duration-300',
+              currentVideoSeconds > endTime ? 'opacity-100' : 'invisible opacity-0',
+            )}
+          >
+            <div
+              className="flex size-36 cursor-pointer flex-col items-center justify-center gap-1 rounded-full p-8 text-white transition-all duration-150 hover:bg-black"
+              onClick={handleReplayClick}
+            >
+              <MdReplay className="size-24" />
+              <span className="font-bold">REPLAY</span>
+            </div>
+          </div>
+        </div>
+        <div className="text-center">
+          <span className="font-semibold">{toTimeCode(currentVideoSeconds)}</span>
+          <span className=""> / </span>
+          <span className="">{toTimeCode(endTime)}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default function VideoContents() {
+  // context
+  const { currentId, histories } = useContext(HistoryContext);
+
+  // state
+  const [currentScriptId, setCurrentScriptId] = useState<number>();
+
+  const current = histories.find((item) => item.id === currentId);
+  const currentScript = current?.scripts.find((script) => script.id === currentScriptId);
 
   // handle
   const handleScriptClick = (id: number) => {
@@ -98,39 +157,23 @@ export default function VideoContents() {
   };
 
   if (!current) {
-    return;
+    return null;
   }
 
   return (
     <div className="flex size-full flex-row items-center justify-center gap-6">
       {/* video */}
-      {asset && (
-        <div className="card p-2 shadow-xl">
-          <div className="card-body">
-            <h2 className="card-title">{asset.title}</h2>
-            <div className="relative size-full">
-              <video
-                id={VIDEO_ID}
-                className="max-h-[600px] min-h-[300px] min-w-[400px] max-w-[800px]"
-                src={`/api/assets/${asset.id}/resource`}
-                onTimeUpdate={(e) => setCurrentVideoSeconds(e.currentTarget.currentTime)}
-              />
-              <div className="absolute left-0 top-0 z-50 flex size-full items-center justify-center gap-2 bg-gray-600 p-2 opacity-80">
-                <span className="cursor-pointer rounded-full">
-                  <MdReplay className="size-16" />
-                </span>
-              </div>
-            </div>
-            <div className="text-center">
-              <span className="font-semibold">{toTimeCode(currentVideoSeconds)}</span>
-              <span className=""> / </span>
-              <span className="">{currentScript && toTimeCode(frameToSec(DEFAULT_FPS, currentScript.outPoint))}</span>
-            </div>
-          </div>
+      {currentScript && (
+        <div className="h-[524px] w-[750px]">
+          <VideoClip
+            assetId={currentScript.assetId}
+            startTime={frameToSec(DEFAULT_FPS, currentScript?.inPoint || 0)}
+            endTime={frameToSec(DEFAULT_FPS, currentScript?.outPoint || 0)}
+          />
         </div>
       )}
 
-      <div className="size-full h-[540px] w-96 rounded-2xl p-4 shadow-xl">
+      <div className="size-full h-[524px] w-96 rounded-2xl p-4 shadow-xl">
         <div className="flex size-full flex-none flex-col items-center gap-3 overflow-auto">
           {current &&
             current.scripts.map((script) => (
