@@ -41,7 +41,7 @@ const HistoryItem = ({
       onClick={handleClick}
     >
       <div className="w-48 flex-none font-medium">
-        <p className="truncate">{history.query}</p>
+        <p className="truncate text-left">{history.query}</p>
       </div>
       <div className="">
         <button className="btn btn-circle btn-ghost" type="button" onClick={(e) => e.stopPropagation()}>
