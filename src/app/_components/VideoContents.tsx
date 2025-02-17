@@ -1,6 +1,8 @@
 'use client';
 
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+
+import { MdReplay } from 'react-icons/md';
 
 import { HistoryContext } from '@/app/_components/HistoryContextProvider';
 
@@ -59,7 +61,6 @@ export default function VideoContents() {
 
   // state
   const [currentScriptId, setCurrentScriptId] = useState<number>();
-  const [totalVideoSeconds, setTotalVideoSeconds] = useState<number>(0);
   const [currentVideoSeconds, setCurrentVideoSeconds] = useState<number>(0);
 
   const current = histories.find((item) => item.id === currentId);
@@ -107,13 +108,19 @@ export default function VideoContents() {
         <div className="card p-2 shadow-xl">
           <div className="card-body">
             <h2 className="card-title">{asset.title}</h2>
-            <video
-              id={VIDEO_ID}
-              className="max-h-[600px] min-h-[300px] min-w-[400px] max-w-[800px]"
-              src={`/api/assets/${asset.id}/resource`}
-              onTimeUpdate={(e) => setCurrentVideoSeconds(e.currentTarget.currentTime)}
-              onLoadedMetadata={(e) => setTotalVideoSeconds(e.currentTarget.duration)}
-            />
+            <div className="relative size-full">
+              <video
+                id={VIDEO_ID}
+                className="max-h-[600px] min-h-[300px] min-w-[400px] max-w-[800px]"
+                src={`/api/assets/${asset.id}/resource`}
+                onTimeUpdate={(e) => setCurrentVideoSeconds(e.currentTarget.currentTime)}
+              />
+              <div className="absolute left-0 top-0 z-50 flex size-full items-center justify-center gap-2 bg-gray-600 p-2 opacity-80">
+                <span className="cursor-pointer rounded-full">
+                  <MdReplay className="size-16" />
+                </span>
+              </div>
+            </div>
             <div className="text-center">
               <span className="font-semibold">{toTimeCode(currentVideoSeconds)}</span>
               <span className=""> / </span>
