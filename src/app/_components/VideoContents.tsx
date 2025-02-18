@@ -65,9 +65,11 @@ interface VideoClipProps {
 const VideoClip = ({ assetId, startTime, endTime }: VideoClipProps) => {
   // useRef
   const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // state
   const [currentVideoSeconds, setCurrentVideoSeconds] = useState<number>(0);
+  const [captureUrl, setCaptureUrl] = useState<string>('');
 
   // query
   const { asset } = useAsset(assetId);
@@ -106,6 +108,24 @@ const VideoClip = ({ assetId, startTime, endTime }: VideoClipProps) => {
     videoRef.current.play();
   };
 
+  // handle
+  const handleCapture = () => {
+    if (!canvasRef.current || !videoRef.current) {
+      return;
+    }
+
+    const ctx = canvasRef.current.getContext('2d');
+
+    if (!ctx) {
+      return;
+    }
+
+    canvasRef.current.width = videoRef.current.videoWidth;
+    canvasRef.current.height = videoRef.current.videoHeight;
+    ctx.drawImage(videoRef.current, 0, 0, canvasRef.current.width, canvasRef.current.height);
+    setCaptureUrl(canvasRef.current.toDataURL('image/png')); // 이미지 저장
+  };
+
   return (
     <div className="card p-2 shadow-xl">
       <div className="card-body">
@@ -136,6 +156,24 @@ const VideoClip = ({ assetId, startTime, endTime }: VideoClipProps) => {
           <span className="font-semibold">{toTimeCode(currentVideoSeconds)}</span>
           <span className=""> / </span>
           <span className="">{toTimeCode(endTime)}</span>
+        </div>
+        <div className="hidden">
+          <button className="btn btn-neutral" onClick={handleCapture}>
+            캡처
+          </button>
+        </div>
+        <div className="hidden">
+          <canvas ref={canvasRef} className="" />
+        </div>
+        <div className="hidden">
+          {captureUrl && (
+            <>
+              <img className="w-[400px]" src={captureUrl} />
+              <a className="btn btn-neutral" href={captureUrl} download="capture.png">
+                다운로드
+              </a>
+            </>
+          )}
         </div>
       </div>
     </div>
