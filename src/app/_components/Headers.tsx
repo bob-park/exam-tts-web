@@ -9,9 +9,16 @@ import Link from 'next/link';
 import UserAvatar from '@/domain/user/components/UserAvatar';
 import { useCurrentUser } from '@/domain/user/query/user';
 
+import { signIn, signOut, useSession } from 'next-auth/react';
+
 export default function Headers() {
   // query
   const { currentUser } = useCurrentUser();
+
+  // hooks
+  const session = useSession();
+
+  console.log(session);
 
   return (
     <header className="m-2 flex w-full flex-row items-center justify-between gap-3 rounded-2xl border bg-white bg-opacity-90 p-3 shadow-lg backdrop-blur">
@@ -27,6 +34,11 @@ export default function Headers() {
           <Link className="btn btn-ghost" href="/">
             <h2 className="select-none text-2xl font-bold">mgGPT</h2>
           </Link>
+
+          {/* login button */}
+          <button className="btn btn-circle btn-ghost" onClick={() => signIn()}>
+            로그인
+          </button>
         </div>
       </div>
 

@@ -24,22 +24,22 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  async rewrites() {
-    return [
-      {
-        source: '/logout',
-        destination: process.env.WEB_SERVICE_HOST + '/logout',
-      },
-      {
-        source: '/api/:path*',
-        destination: `${process.env.WEB_SERVICE_HOST}/:path*`,
-      },
-      {
-        source: '/api/oauth2/authorization/keyflow-auth',
-        destination: process.env.WEB_SERVICE_HOST + '/oauth2/authorization/keyflow-auth',
-      },
-    ];
-  },
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: '/logout',
+  //       destination: process.env.WEB_SERVICE_HOST + '/logout',
+  //     },
+  //     {
+  //       source: '/api/:path*',
+  //       destination: `${process.env.WEB_SERVICE_HOST}/:path*`,
+  //     },
+  //     {
+  //       source: '/api/oauth2/authorization/keyflow-auth',
+  //       destination: process.env.WEB_SERVICE_HOST + '/oauth2/authorization/keyflow-auth',
+  //     },
+  //   ];
+  // },
 };
 
 export default nextConfig;

@@ -22,25 +22,25 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookieStore = await cookies();
-
+  // const cookieStore = await cookies();
+  //
   const queryClient = new QueryClient();
-
-  const result = await fetch(`${WEB_SERVICE_HOST}/users/me`, {
-    method: 'get',
-    headers: {
-      Cookie: `JSESSIONID=${cookieStore.get('JSESSIONID')?.value || ''}`,
-    },
-    credentials: 'include',
-  });
-
-  if (!result.ok) {
-    redirect('/api/oauth2/authorization/keyflow-auth');
-  }
-
-  const user = (await result.json()) as User;
-  queryClient.setQueryData(['user', 'me'], user);
-
+  //
+  // const result = await fetch(`${WEB_SERVICE_HOST}/users/me`, {
+  //   method: 'get',
+  //   headers: {
+  //     Cookie: `JSESSIONID=${cookieStore.get('JSESSIONID')?.value || ''}`,
+  //   },
+  //   credentials: 'include',
+  // });
+  //
+  // if (!result.ok) {
+  //   redirect('/api/oauth2/authorization/keyflow-auth');
+  // }
+  //
+  // const user = (await result.json()) as User;
+  // queryClient.setQueryData(['user', 'me'], user);
+  //
   const dehydratedState = dehydrate(queryClient);
 
   return (
