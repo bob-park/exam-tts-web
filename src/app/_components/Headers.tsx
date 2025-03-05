@@ -9,16 +9,14 @@ import Link from 'next/link';
 import UserAvatar from '@/domain/user/components/UserAvatar';
 import { useCurrentUser } from '@/domain/user/query/user';
 
-import { signIn, signOut, useSession } from 'next-auth/react';
+// import { signIn, signOut, useSession } from 'next-auth/react';
 
 export default function Headers() {
   // query
   const { currentUser } = useCurrentUser();
 
   // hooks
-  const session = useSession();
-
-  console.log(session);
+  // const session = useSession();
 
   return (
     <header className="m-2 flex w-full flex-row items-center justify-between gap-3 rounded-2xl border bg-white bg-opacity-90 p-3 shadow-lg backdrop-blur">
@@ -36,9 +34,9 @@ export default function Headers() {
           </Link>
 
           {/* login button */}
-          <button className="btn btn-circle btn-ghost" onClick={() => signIn()}>
-            로그인
-          </button>
+          {/*<button className="btn btn-circle btn-ghost" onClick={() => signIn()}>*/}
+          {/*  로그인*/}
+          {/*</button>*/}
         </div>
       </div>
 

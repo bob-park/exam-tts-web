@@ -22,8 +22,6 @@ const keyflowAuth: OAuthConfig<UserInfo> = {
   clientSecret: 'VD5du6zZ5457N340tjY0',
   idToken: true,
   profile(profile: UserInfo) {
-    console.log(profile);
-
     return {
       id: profile.sub,
       name: profile.profile?.username,
@@ -34,6 +32,20 @@ const keyflowAuth: OAuthConfig<UserInfo> = {
 export const authOptions: AuthOptions = {
   // Configure one or more authentication providers
   providers: [keyflowAuth],
+  callbacks: {
+    async session({ session, user, token }) {
+      console.log(token);
+
+      return session;
+    },
+    async jwt({ token, user, account, profile, isNewUser }) {
+      if (profile) {
+        token.user = profile;
+      }
+
+      return token;
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);
