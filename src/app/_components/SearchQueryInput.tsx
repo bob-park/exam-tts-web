@@ -53,7 +53,7 @@ export default function SearchQueryInput() {
   };
 
   return (
-    <div className="card size-full bg-base-100 shadow-xl">
+    <div className="card bg-base-100 size-full border border-gray-300 shadow-xl">
       <div className="card-body">
         <form onSubmit={handleSubmit}>
           <div className="relative flex flex-row items-center justify-center gap-4">

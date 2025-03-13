@@ -33,7 +33,7 @@ const AssetScriptItem = ({
   return (
     <div
       className={cx(
-        'flex w-full flex-row items-center justify-center gap-2 rounded-xl px-4 py-4 transition-all duration-150 hover:cursor-pointer hover:bg-base-200',
+        'hover:bg-base-200 flex w-full flex-row items-center justify-center gap-2 rounded-xl px-4 py-4 transition-all duration-150 hover:cursor-pointer',
         {
           'bg-base-200': active,
         },
@@ -139,7 +139,7 @@ const VideoClip = ({ assetId, startTime, endTime }: VideoClipProps) => {
           />
           <div
             className={cx(
-              'absolute left-0 top-0 z-50 flex size-full items-center justify-center gap-2 bg-gray-600 bg-opacity-80 p-2 transition-all duration-300',
+              'bg-opacity-80 absolute top-0 left-0 z-50 flex size-full items-center justify-center gap-2 bg-gray-600 p-2 transition-all duration-300',
               currentVideoSeconds > endTime ? 'opacity-100' : 'invisible opacity-0',
             )}
           >
@@ -261,7 +261,7 @@ export default function VideoContents() {
               />
             ))}
         </div>
-        <div className={cx('absolute bottom-2 right-4')}>
+        <div className={cx('absolute right-4 bottom-2')}>
           <div className="flex flex-col items-center justify-center gap-1">
             <button
               className={cx('btn btn-circle btn-neutral', scriptScrollTop < 50 ? 'hidden' : 'visible')}

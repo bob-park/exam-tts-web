@@ -54,7 +54,7 @@ export default async function RootLayout({
         <RQProvider>
           <HydrationBoundary state={dehydratedState}>
             {/* headers */}
-            <div className="sticky left-0 top-1 z-50 flex w-full flex-row items-start justify-center px-5">
+            <div className="sticky top-1 left-0 z-50 flex w-full flex-row items-start justify-center px-5">
               <Headers />
             </div>
 

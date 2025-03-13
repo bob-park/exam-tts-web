@@ -33,7 +33,7 @@ const HistoryItem = ({
   return (
     <div
       className={cx(
-        'flex w-full flex-row items-center justify-between gap-2 rounded-xl px-4 py-2 transition-all duration-150 hover:cursor-pointer hover:bg-base-200',
+        'hover:bg-base-200 flex w-full flex-row items-center justify-between gap-2 rounded-xl px-4 py-2 transition-all duration-150 hover:cursor-pointer',
         {
           'bg-base-200': active,
         },
@@ -93,7 +93,7 @@ export default function HistorySideMenu() {
   };
 
   return (
-    <div className="flex size-full select-none flex-col gap-2 overflow-auto rounded-2xl border bg-white p-6 shadow-xl">
+    <div className="border-gray flex size-full flex-col gap-2 overflow-auto rounded-2xl border border-gray-300 bg-white p-6 shadow-xl select-none">
       {/* title */}
       <h2 className="text-xl font-bold">기록</h2>
 

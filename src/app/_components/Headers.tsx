@@ -9,17 +9,12 @@ import Link from 'next/link';
 import UserAvatar from '@/domain/user/components/UserAvatar';
 import { useCurrentUser } from '@/domain/user/query/user';
 
-// import { signIn, signOut, useSession } from 'next-auth/react';
-
 export default function Headers() {
   // query
   const { currentUser } = useCurrentUser();
 
-  // hooks
-  // const session = useSession();
-
   return (
-    <header className="m-2 flex w-full flex-row items-center justify-between gap-3 rounded-2xl border bg-white bg-opacity-90 p-3 shadow-lg backdrop-blur">
+    <header className="bg-opacity-90 m-2 flex w-full flex-row items-center justify-between gap-3 rounded-2xl border border-gray-300 bg-white p-3 shadow-lg backdrop-blur">
       {/* content */}
       <div className="">
         <div className="flex flex-row items-center justify-between">
@@ -30,13 +25,8 @@ export default function Headers() {
 
           {/* logo */}
           <Link className="btn btn-ghost" href="/">
-            <h2 className="select-none text-2xl font-bold">mgGPT</h2>
+            <h2 className="text-2xl font-bold select-none">mgGPT</h2>
           </Link>
-
-          {/* login button */}
-          {/*<button className="btn btn-circle btn-ghost" onClick={() => signIn()}>*/}
-          {/*  로그인*/}
-          {/*</button>*/}
         </div>
       </div>
 
@@ -46,7 +36,7 @@ export default function Headers() {
           <div tabIndex={0} role="button" className="m-1">
             <UserAvatar alt={currentUser?.username || 'username'} />
           </div>
-          <ul tabIndex={0} className="menu dropdown-content z-[1] w-40 rounded-box bg-base-100 p-2 shadow">
+          <ul tabIndex={0} className="menu dropdown-content rounded-box bg-base-100 z-[1] w-40 p-2 shadow">
             <li>
               <Link href="/profile">
                 <CgProfile className="h-3 w-3" />

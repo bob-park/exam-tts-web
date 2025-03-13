@@ -1,4 +1,4 @@
-type FileType = 'HI_RES' | 'LOW_RES'
+type FileType = 'HI_RES' | 'LOW_RES';
 
 interface AssetScript {
   id: number;
@@ -21,5 +21,5 @@ interface Asset {
   title: string;
   videoFps?: number;
   videoDuration?: number;
-  files?: AssetFile[]
+  files?: AssetFile[];
 }
