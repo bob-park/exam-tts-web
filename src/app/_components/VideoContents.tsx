@@ -168,7 +168,7 @@ const VideoClip = ({ assetId, startTime, endTime }: VideoClipProps) => {
         <div className="hidden">
           {captureUrl && (
             <>
-              <img className="w-[400px]" src={captureUrl} />
+              <img className="w-[400px]" src={captureUrl} alt="capture" />
               <a className="btn btn-neutral" href={captureUrl} download="capture.png">
                 다운로드
               </a>
