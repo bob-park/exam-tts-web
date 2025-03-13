@@ -44,7 +44,7 @@ export default async function RootLayout({
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <html lang="en">
+    <html lang="ko">
       {process.env.NODE_ENV !== 'production' && (
         <head>
           <script src="https://unpkg.com/react-scan/dist/auto.global.js" />
